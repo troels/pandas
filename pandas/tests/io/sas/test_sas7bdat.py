@@ -183,6 +183,22 @@ def test_date_time(datapath):
     tm.assert_frame_equal(df, df0)
 
 
+def test_many_columns(datapath):
+    fname = datapath("io", "sas", "data", "many_columns.sas7bdat")
+    df = pd.read_sas(fname, encoding='latin-1')
+    fname = datapath("io", "sas", "data", "many_columns.csv")
+    df0 = pd.read_csv(fname, encoding='latin-1',
+                      dtype={
+                          'DATASRC': np.dtype('S'),
+                          'PDDOCID': np.dtype('S'),
+                          'VISIT_NO': np.dtype('S'),
+                          'ecgrtxt': np.dtype('S'),
+                          'ecgrtime': np.dtype('d'),
+                          'nvitl1': np.dtype('d')
+                      })
+    tm.assert_frame_equal(df, df0)
+
+
 def test_zero_variables(datapath):
     # Check if the SAS file has zero variables (PR #18184)
     fname = datapath("io", "sas", "data", "zero_variables.sas7bdat")
